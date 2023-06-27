@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import security.example.security.auth.RegisterRequest;
-import security.example.security.dto.BookDto;
 import security.example.security.dto.ResponseDto;
-import security.example.security.service.AuthenticationService;
+import security.example.security.service.impl.AuthenticationServiceImpl;
 import security.example.security.service.BookService;
 
 @RestController
@@ -16,7 +15,7 @@ public class DemoController {
     @Autowired
     private BookService bookService;
     @Autowired
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
 
     @GetMapping("/admin")
     public ResponseEntity<?> admin(){

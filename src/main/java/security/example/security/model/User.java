@@ -28,11 +28,11 @@ public class User implements UserDetails {
         this.updated_At=new Date(System.currentTimeMillis());
     }
     @Id
-    private String user_id;
-    private String user_name;
+    private String userId;
+    private String userName;
     private String email;
     private String password;
-    private String mobile_number;
+    private String mobileNumber;
     @ManyToMany
     @JoinTable(name = "user_role",
     joinColumns = @JoinColumn(name="User_id"),
@@ -43,10 +43,12 @@ public class User implements UserDetails {
     private Date created_At;
     private Date updated_At;
 
-    public User(String mobile_number,String user_name,String email,String password,Set<Role> roles){
-        this.user_id=email;
-        this.mobile_number=mobile_number;
-        this.user_name=user_name;
+
+
+    public User(String mobileNumber,String userName,String email,String password,Set<Role> roles){
+        this.userId=email;
+        this.mobileNumber=mobileNumber;
+        this.userName=userName;
         this.email=email;
         this.password=password;
         this.roles=roles;
