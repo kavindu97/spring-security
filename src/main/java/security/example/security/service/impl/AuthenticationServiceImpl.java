@@ -2,7 +2,6 @@ package security.example.security.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import security.example.security.auth.dto.AuthenticationRequest;
 import security.example.security.auth.dto.AuthenticationResponse;
 import security.example.security.auth.dto.RegisterRequest;
+import security.example.security.dto.ResponseDto;
 import security.example.security.model.Role;
 import security.example.security.model.User;
 import security.example.security.repository.RoleCustomRepo;
@@ -29,45 +29,61 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final RoleCustomRepo roleCustomRepo;
     private final UserService userService;
+    private String errorMzg="Internal server error";
 
     @Override
-    public ResponseEntity<?> register(RegisterRequest registerRequest) {
+    public ResponseDto register(RegisterRequest registerRequest) {
+        ResponseDto responseDto=new ResponseDto();
         try {
-            if (userRepository.existsById(registerRequest.getEmail().toString())) {
+            if (userRepository.existsById(registerRequest.getEmail())) {
                 throw new IllegalArgumentException("User with " + registerRequest.getEmail() + "email already exists");
             }
 
             userService.saveUser(new User(registerRequest.getMobile_number(), registerRequest.getUser_name(), registerRequest.getEmail(), registerRequest.getPassword(), new HashSet<>()));
             userService.addToUser(registerRequest.getEmail(), "ROLE_USER");//default role
             User user = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow();
-            return ResponseEntity.ok(user);
+            responseDto.setData(user);
+            responseDto.setCode(200);
+            responseDto.setMzg("Successfully added user");
+            return responseDto;
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            responseDto.setData((HttpStatus.BAD_REQUEST));
+            return  responseDto;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            responseDto.setCode(500);
+            responseDto.setMzg(errorMzg);
+            return responseDto;
         }
     }//mekma use krnna admin waltath
 
     @Override
-    public ResponseEntity<?> registerAdmin(RegisterRequest registerRequest) {
+    public ResponseDto registerAdmin(RegisterRequest registerRequest) {
+        ResponseDto responseDto=new ResponseDto();
         try {
-            if (userRepository.existsById(registerRequest.getEmail().toString())) {
+            if (userRepository.existsById(registerRequest.getEmail())) {
                 throw new IllegalArgumentException("User with " + registerRequest.getEmail() + "email already exists");
             }
 
             userService.saveUser(new User(registerRequest.getMobile_number(), registerRequest.getUser_name(), registerRequest.getEmail(), registerRequest.getPassword(), new HashSet<>()));
             userService.addToUser(registerRequest.getEmail(), "ROLE_ADMIN");//I set this to admin
             User user = userRepository.findByEmail(registerRequest.getEmail()).orElseThrow();
-            return ResponseEntity.ok(user);
+            responseDto.setData(user);
+            responseDto.setCode(200);
+            responseDto.setMzg("Successfully added admin");
+            return responseDto;
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+             responseDto.setData((HttpStatus.BAD_REQUEST));
+             return  responseDto;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            responseDto.setCode(500);
+            responseDto.setMzg(errorMzg);
+           return responseDto;
         }
     }
 
     @Override
-    public ResponseEntity<?> authenticate(AuthenticationRequest authenticationRequest) {
+    public ResponseDto authenticate(AuthenticationRequest authenticationRequest) {
+        ResponseDto responseDto=new ResponseDto();
         try {
             User user = userRepository.findByEmail(authenticationRequest.getEmail())
                     .orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -83,18 +99,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             set.stream().forEach(i -> authorities.add(new SimpleGrantedAuthority(i.getName())));
             var jwtAccessToken = jwtService.generateToken(user, authorities);
             var jwtRefreshToken = jwtService.generateRefreshToken(user, authorities);
-            return ResponseEntity.ok(AuthenticationResponse.builder()
-                    .access_token(jwtAccessToken)
-                    .refresh_token(jwtRefreshToken)
-                    .email(user.getEmail())
-                    .user_name(user.getUsername())
-                    .build());
+
+            AuthenticationResponse authenticationResponse=new AuthenticationResponse();
+            authenticationResponse.setAccessToken(jwtAccessToken);
+            authenticationResponse.setRefreshToken(jwtRefreshToken);
+            authenticationResponse.setEmail(user.getEmail());
+            authenticationResponse.setUserName(user.getUser_name());
+            responseDto.setCode(200);
+            responseDto.setData(authenticationResponse);
+            responseDto.setMzg("Successfully login user");
+            return responseDto;
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            responseDto.setCode(404);
+          responseDto.setMzg("User not found");
+            return responseDto;
         } catch (BadCredentialsException e) {
-            return ResponseEntity.badRequest().body("Invalid Credential");
+            responseDto.setCode(501);
+            responseDto.setMzg("Invalid Password Credentials ");
+            return responseDto;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");
+            responseDto.setCode(500);
+            responseDto.setData(e);
+            return responseDto;
         }
     }
 

@@ -13,6 +13,7 @@ import security.example.security.repository.UserRepository;
 import security.example.security.service.UserService;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,16 +38,18 @@ public class UserServiceImpl implements UserService {
         return  roleRepository.save(role);
     }
     @Override
-    public void addToUser(String username,String rolename){
-        if(!userRepository.findByEmail(username).isPresent()){
-            throw new IllegalArgumentException("User with email "+username+" does not exits");
+    public void addToUser(String email,String rolename){
+        Optional<User> optionalUser=userRepository.findByEmail(email);
+        if(!optionalUser.isPresent()){
+            throw new IllegalArgumentException("User with email "+email+" does not exits");
         }
+
         Role role=roleRepository.findByName(rolename);
         if(role == null){
             throw new IllegalArgumentException("Role with name "+rolename+" does not exits");
         }
-        User user=userRepository.findByEmail(username).get();
-        user.getRoles().add(role);//this hashset so we can add
+            User user = optionalUser.get();
+            user.getRoles().add(role);//this hashset so we can add
 
 
     }

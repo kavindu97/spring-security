@@ -8,10 +8,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 
 @Configuration
 @EnableWebSecurity
@@ -21,8 +22,9 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(STATELESS);
+        http.csrf(csrf-> csrf.disable());
+        http.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http.authorizeRequests()
                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
@@ -30,7 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("/demo/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers("/demo/user/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                 .and()
-                .csrf().disable()
+                .csrf(csrf-> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeRequests()
                 .anyRequest()

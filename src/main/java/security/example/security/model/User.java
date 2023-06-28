@@ -20,16 +20,16 @@ import java.util.*;
 public class User implements UserDetails {
     @PrePersist
     protected void onCreate(){
-        this.created_At=new Date(System.currentTimeMillis());
+        this.createdAt=new Date(System.currentTimeMillis());
     }
 
     @PreUpdate
     protected void onUpdate(){
-        this.updated_At=new Date(System.currentTimeMillis());
+        this.updatedAt=new Date(System.currentTimeMillis());
     }
     @Id
     private String userId;
-    private String userName;
+    private String user_name;// there is a inbuilt variable userName in UserDetails class
     private String email;
     private String password;
     private String mobileNumber;
@@ -40,15 +40,15 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
-    private Date created_At;
-    private Date updated_At;
+    private Date createdAt;
+    private Date updatedAt;
 
 
 
     public User(String mobileNumber,String userName,String email,String password,Set<Role> roles){
         this.userId=email;
         this.mobileNumber=mobileNumber;
-        this.userName=userName;
+        this.user_name=userName;
         this.email=email;
         this.password=password;
         this.roles=roles;

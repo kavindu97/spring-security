@@ -18,7 +18,7 @@ public class BookServiceImpl implements BookService {
     public ResponseDto insertData(BookDto bookDto) {
         ResponseDto responseDto=new ResponseDto();
         Book book =new Book();
-        book.setBook(bookDto.getBook());
+        book.setBookName(bookDto.getBookName());
         book.setBookId(bookDto.getBookId());
         bookRepository.save(book);
 

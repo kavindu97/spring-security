@@ -48,8 +48,8 @@ public class SecurityApplication {
 				userService.saveRole(new Role(null,"Super_ADMIN","this is super admin"));
 
 				userService.saveUser(new User("4545", "Kavi", "kavindusenarath@gmail.com", "19970629", new HashSet<>()));
-				userService.saveUser(new User("4545445", "Kavia", "kavindusenaratha@gmail.com", "19970629", new HashSet<>()));
-				userService.saveUser(new User("4545", "Kavim", "kavindusenarathm@gmail.com", "19970629", new HashSet<>()));
+				userService.saveUser(new User("4545445", "Kavia", "kavindusenaratha@gmail.com", "19970629a", new HashSet<>()));
+				userService.saveUser(new User("4545", "Kavim", "kavindusenarathm@gmail.com", "19970629m", new HashSet<>()));
 				userService.saveUser(new User("12345","KaviSup","superadmin@gmail.com","123",new HashSet<>()));
 
 

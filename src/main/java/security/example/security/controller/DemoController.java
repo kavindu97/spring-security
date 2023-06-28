@@ -1,7 +1,7 @@
 package security.example.security.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import security.example.security.auth.dto.RegisterRequest;
 import security.example.security.dto.ResponseDto;
@@ -18,19 +18,19 @@ public class DemoController {
     private AuthenticationServiceImpl authenticationService;
 
     @GetMapping("/admin")
-    public ResponseEntity<?> admin(){
-        return ResponseEntity.ok("This is Admin Route");
+    public String admin(){
+        return "This is admin route";
     }
     @GetMapping("/user")
-    public ResponseEntity<?> users(){
-        return ResponseEntity.ok("This is User Route");
+    public String users(){
+        return "This is user Route";
     }
     @GetMapping("/user/all")
     public  ResponseDto allData(){
          return bookService.allData();
     }
     @PostMapping("/admin/new-admin")
-    public ResponseEntity<?> registerAdmin(@RequestBody RegisterRequest registerRequest){
-        return ResponseEntity.ok(authenticationService.registerAdmin(registerRequest));
+    public ResponseDto registerAdmin(@RequestBody RegisterRequest registerRequest){
+        return authenticationService.registerAdmin(registerRequest);
     }
 }

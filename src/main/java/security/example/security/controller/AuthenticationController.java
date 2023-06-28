@@ -1,13 +1,13 @@
 package security.example.security.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import security.example.security.auth.dto.AuthenticationRequest;
 import security.example.security.auth.dto.RegisterRequest;
+import security.example.security.dto.ResponseDto;
 import security.example.security.service.AuthenticationService;
 
 @RestController
@@ -17,15 +17,15 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest){
-        return ResponseEntity.ok(authenticationService.register(registerRequest));
+    public ResponseDto register(@RequestBody RegisterRequest registerRequest){
+        return authenticationService.register(registerRequest);
     }
 
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest){
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+    public ResponseDto login(@RequestBody AuthenticationRequest authenticationRequest){
+        return authenticationService.authenticate(authenticationRequest);
     }
 
 }

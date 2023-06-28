@@ -12,6 +12,6 @@ import lombok.Setter;
 
 public class BookDto {
     private  Integer id;
-    private String book;
+    private String bookName;
     private String bookId;
 }

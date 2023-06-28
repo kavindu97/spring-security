@@ -22,12 +22,12 @@ import java.util.Set;
 public class Role {
     @PrePersist
     protected void onCreate(){
-        this.created_At=new Date(System.currentTimeMillis());
+        this.createdAt=new Date(System.currentTimeMillis());
     }
 
     @PreUpdate
     protected void onUpdate(){
-        this.updated_At=new Date(System.currentTimeMillis());
+        this.updatedAt=new Date(System.currentTimeMillis());
     }
 
 
@@ -44,8 +44,8 @@ public class Role {
     private Long id;
     private String name;
     private String description;
-    private Date created_At;
-    private Date updated_At;
+    private Date createdAt;
+    private Date updatedAt;
     @ManyToMany(mappedBy = "roles")
     @Fetch(value = FetchMode.SELECT)
     @JsonIgnore
