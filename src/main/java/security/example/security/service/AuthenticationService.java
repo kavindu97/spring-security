@@ -1,8 +1,8 @@
 package security.example.security.service;
 
 import org.springframework.http.ResponseEntity;
-import security.example.security.auth.AuthenticationRequest;
-import security.example.security.auth.RegisterRequest;
+import security.example.security.auth.dto.AuthenticationRequest;
+import security.example.security.auth.dto.RegisterRequest;
 
 public interface AuthenticationService {
     ResponseEntity<?> register(RegisterRequest registerRequest);

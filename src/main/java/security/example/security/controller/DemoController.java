@@ -3,7 +3,7 @@ package security.example.security.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import security.example.security.auth.RegisterRequest;
+import security.example.security.auth.dto.RegisterRequest;
 import security.example.security.dto.ResponseDto;
 import security.example.security.service.impl.AuthenticationServiceImpl;
 import security.example.security.service.BookService;
