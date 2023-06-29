@@ -45,6 +45,7 @@ public class User implements UserDetails {
 
 
 
+
     public User(String mobileNumber,String userName,String email,String password,Set<Role> roles){
         this.userId=email;
         this.mobileNumber=mobileNumber;
@@ -57,7 +58,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities=new ArrayList<>();
-        roles.stream().forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
+        roles.forEach(i->authorities.add(new SimpleGrantedAuthority(i.getName())));
         return List.of(new SimpleGrantedAuthority(authorities.toString()));
     }
 
